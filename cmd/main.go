@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/Shalqarov/weather-bot/config"
 	"github.com/Shalqarov/weather-bot/internal/app"
 )
@@ -10,10 +8,8 @@ import (
 const configPath = "./config.toml"
 
 func init() {
-	err := config.NewConfig(configPath)
-	if err != nil {
-		log.Fatalln(err.Error())
-	}
+	// Config initialization
+	config.GetConfig()
 }
 
 func main() {

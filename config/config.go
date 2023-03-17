@@ -1,25 +1,34 @@
 package config
 
 import (
-	"github.com/BurntSushi/toml"
+	"encoding/json"
+	"log"
+	"os"
+	"sync"
 )
 
-var (
-	cfg *Config
-)
+const configPath string = "./config.json"
 
 type Config struct {
-	WeatherAPI  string
-	Port        string
-	TelegramAPI string
+	WeatherAPI  string `json:"weather_api"`
+	Port        string `json:"port"`
+	TelegramAPI string `json:"telegram_api"`
 }
+
+var (
+	cfg   *Config
+	cOnce sync.Once
+)
 
 func GetConfig() *Config {
+	cOnce.Do(func() {
+		data, err := os.ReadFile(configPath)
+		if err != nil {
+			log.Fatalln(err.Error())
+		}
+		if err = json.Unmarshal(data, &cfg); err != nil {
+			log.Fatalln(err.Error())
+		}
+	})
 	return cfg
-}
-
-func NewConfig(path string) error {
-	cfg := &Config{}
-	_, err := toml.DecodeFile(path, cfg)
-	return err
 }
