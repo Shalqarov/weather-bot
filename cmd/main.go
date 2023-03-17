@@ -7,8 +7,10 @@ import (
 	"github.com/Shalqarov/weather-bot/internal/app"
 )
 
+const configPath = "./config.toml"
+
 func main() {
-	c, err := config.NewConfig("./config.toml")
+	c, err := config.NewConfig(configPath)
 	if err != nil {
 		log.Fatalln(err)
 	}
