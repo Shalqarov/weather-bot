@@ -3,8 +3,9 @@ package config
 import "github.com/BurntSushi/toml"
 
 type Config struct {
-	APIKey string
-	Port   string
+	WeatherAPI  string
+	Port        string
+	TelegramAPI string
 }
 
 func NewConfig(path string) (*Config, error) {

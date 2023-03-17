@@ -9,7 +9,7 @@ import (
 )
 
 func Run(config *config.Config) {
-	w, err := weather.CurrentTemperature("Astana", config.APIKey)
+	w, err := weather.CurrentTemperature("Astana", config.WeatherAPI)
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
