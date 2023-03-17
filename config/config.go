@@ -1,6 +1,12 @@
 package config
 
-import "github.com/BurntSushi/toml"
+import (
+	"github.com/BurntSushi/toml"
+)
+
+var (
+	cfg *Config
+)
 
 type Config struct {
 	WeatherAPI  string
@@ -8,8 +14,12 @@ type Config struct {
 	TelegramAPI string
 }
 
-func NewConfig(path string) (*Config, error) {
-	c := &Config{}
-	_, err := toml.DecodeFile(path, c)
-	return c, err
+func GetConfig() *Config {
+	return cfg
+}
+
+func NewConfig(path string) error {
+	cfg := &Config{}
+	_, err := toml.DecodeFile(path, cfg)
+	return err
 }

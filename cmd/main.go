@@ -9,10 +9,13 @@ import (
 
 const configPath = "./config.toml"
 
-func main() {
-	c, err := config.NewConfig(configPath)
+func init() {
+	err := config.NewConfig(configPath)
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalln(err.Error())
 	}
-	app.Run(c)
+}
+
+func main() {
+	app.Run()
 }
