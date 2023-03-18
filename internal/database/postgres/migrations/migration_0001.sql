@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS "user" (
+    "user_id" BIGINT UNIQUE NOT NULL PRIMARY KEY,
+    "created_at" TIMESTAMP NOT NULL
+);
