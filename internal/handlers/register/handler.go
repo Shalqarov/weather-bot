@@ -6,12 +6,12 @@ import (
 
 	"github.com/Shalqarov/weather-bot/internal/database/postgres"
 	"github.com/Shalqarov/weather-bot/internal/database/postgres/repository/user"
+	"github.com/Shalqarov/weather-bot/tools"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 const (
 	welcomeMsg = "Через команду /w *Название локации* можно узнать текущую погоду в данной локации"
-	errorMsg   = "Произошла неполадка, обратитесь позже"
 )
 
 func Handler(update tgbotapi.Update, msg *tgbotapi.MessageConfig) error {
@@ -28,12 +28,12 @@ func Handler(update tgbotapi.Update, msg *tgbotapi.MessageConfig) error {
 
 	tx, err := postgres.Transaction(ctx)
 	if err != nil {
-		msg.Text = errorMsg
+		msg.Text = tools.ErrorMsg
 		return err
 	}
 	has, err := user.Has(ctx, u.UserID)
 	if err != nil {
-		msg.Text = errorMsg
+		msg.Text = tools.ErrorMsg
 		return err
 	}
 	if has {
@@ -44,11 +44,11 @@ func Handler(update tgbotapi.Update, msg *tgbotapi.MessageConfig) error {
 	ctx, cancel = context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	if err = u.Add(ctx, tx); err != nil {
-		msg.Text = errorMsg
+		msg.Text = tools.ErrorMsg
 		return err
 	}
 	if err = tx.Commit(); err != nil {
-		msg.Text = errorMsg
+		msg.Text = tools.ErrorMsg
 		return err
 	}
 	return nil

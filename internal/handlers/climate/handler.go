@@ -5,14 +5,13 @@ import (
 	"time"
 
 	"github.com/Shalqarov/weather-bot/internal/database/postgres"
-	"github.com/Shalqarov/weather-bot/internal/database/postgres/repository/stats"
+	"github.com/Shalqarov/weather-bot/internal/database/postgres/repository/stat"
 	"github.com/Shalqarov/weather-bot/internal/database/postgres/repository/user"
 	"github.com/Shalqarov/weather-bot/internal/weather"
+	"github.com/Shalqarov/weather-bot/tools"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	uuid "github.com/satori/go.uuid"
 )
-
-const errorMsg = "Произошла неполадка, обратитесь позже"
 
 func Handler(update tgbotapi.Update, msg *tgbotapi.MessageConfig) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -32,7 +31,7 @@ func Handler(update tgbotapi.Update, msg *tgbotapi.MessageConfig) error {
 	}
 	msg.Text = forecast
 
-	stat := stats.Stats{
+	s := stat.Stat{
 		ID:        uuid.NewV4().String(),
 		UserID:    update.Message.From.ID,
 		Message:   forecast,
@@ -41,17 +40,17 @@ func Handler(update tgbotapi.Update, msg *tgbotapi.MessageConfig) error {
 
 	tx, err := postgres.Transaction(ctx)
 	if err != nil {
-		msg.Text = errorMsg
+		msg.Text = tools.ErrorMsg
 		return err
 	}
 	ctx, cancel = context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-	if err = stat.Add(ctx, tx); err != nil {
-		msg.Text = errorMsg
+	if err = s.Add(ctx, tx); err != nil {
+		msg.Text = tools.ErrorMsg
 		return err
 	}
 	if err = tx.Commit(); err != nil {
-		msg.Text = errorMsg
+		msg.Text = tools.ErrorMsg
 		return err
 	}
 	return nil
