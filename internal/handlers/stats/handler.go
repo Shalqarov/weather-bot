@@ -2,6 +2,7 @@ package stats
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"time"
 
@@ -16,6 +17,10 @@ func Handler(update tgbotapi.Update, msg *tgbotapi.MessageConfig) error {
 	defer cancel()
 	count, err := stat.CountByUser(ctx, update.Message.From.ID)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			msg.Text = tools.NoEntries
+			return err
+		}
 		msg.Text = tools.ErrorMsg
 		return err
 	}
@@ -24,6 +29,10 @@ func Handler(update tgbotapi.Update, msg *tgbotapi.MessageConfig) error {
 	defer cancel()
 	statistic, err := stat.EarliestByUser(ctx, update.Message.From.ID)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			msg.Text = tools.NoEntries
+			return err
+		}
 		msg.Text = tools.ErrorMsg
 		return err
 	}
