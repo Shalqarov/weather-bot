@@ -37,7 +37,7 @@ func HandleUpdates(updates tgbotapi.UpdatesChannel) (err error) {
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 		err = handleMessages(update, &msg)
 		if err != nil {
-			log.Println(err)
+			log.Println(err.Error())
 		}
 		_, err = GetBot().Send(msg)
 		if err != nil {
