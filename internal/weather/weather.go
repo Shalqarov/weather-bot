@@ -19,7 +19,14 @@ func CurrentTemperature(location string) (string, error) {
 		return "", err
 	}
 	return fmt.Sprintf(
-		"Локация: %s\nТемпература воздуха: %.f°C",
-		location, math.Round(w.Main.Temp),
+		"Локация: %s\n"+
+			"Температура воздуха: %.f°C, ощущается как %.f°C\n"+
+			"Влажность воздуха: %d\n"+
+			"Небо: %s\n",
+		location,
+		math.Round(w.Main.Temp),
+		math.Round(w.Main.FeelsLike),
+		w.Main.Humidity,
+		w.Weather[0].Description,
 	), nil
 }
