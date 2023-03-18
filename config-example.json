@@ -1,0 +1,10 @@
+{
+  "port": "8080",
+  "weather_api": "",
+  "telegram_api": "",
+  "user_db": "",
+  "password_db": "",
+  "host_db": "",
+  "port_db": "",
+  "name_db": ""
+}
