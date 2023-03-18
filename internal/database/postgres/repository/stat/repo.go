@@ -1,4 +1,4 @@
-package stats
+package stat
 
 import (
 	"context"
@@ -8,16 +8,20 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type Stats struct {
+type Stat struct {
 	ID        string    `db:"id"`
 	UserID    int64     `db:"user_id"`
 	Message   string    `db:"message"`
 	CreatedAt time.Time `db:"created_at"`
 }
 
-func (s *Stats) Add(ctx context.Context, tx *sqlx.Tx) error {
+func New() *Stat {
+	return new(Stat)
+}
+
+func (s *Stat) Add(ctx context.Context, tx *sqlx.Tx) error {
 	query := `
-		INSERT INTO "stats" (
+		INSERT INTO "stat" (
 			"id",
 			"user_id",
 			"message",
@@ -34,18 +38,18 @@ func (s *Stats) Add(ctx context.Context, tx *sqlx.Tx) error {
 func CountByUser(ctx context.Context, id int64) (count int64, err error) {
 	query := `
 		SELECT COUNT(*)
-		FROM "stats" WHERE "user_id" = $1
+		FROM "stat" WHERE "user_id" = $1
 `
 	err = postgres.GetDB().GetContext(ctx, &count, query, id)
 	return
 }
 
-func (s *Stats) EarliestByUser(ctx context.Context, id int64) (*Stats, error) {
-	stat := new(Stats)
+func EarliestByUser(ctx context.Context, id int64) (*Stat, error) {
+	stat := new(Stat)
 	query := `
-		SELECT * FROM stats WHERE user_id = $1 ORDER BY created_at LIMIT 1;
+		SELECT * FROM "stat" WHERE user_id = $1 ORDER BY created_at LIMIT 1;
 `
-	err := postgres.GetDB().GetContext(ctx, &stat, query, id)
+	err := postgres.GetDB().GetContext(ctx, stat, query, id)
 	if err != nil {
 		return nil, err
 	}
