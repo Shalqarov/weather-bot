@@ -5,11 +5,29 @@ import (
 	"os"
 	"sort"
 
+	"github.com/Shalqarov/weather-bot/config"
+	"github.com/Shalqarov/weather-bot/internal/bot"
 	"github.com/Shalqarov/weather-bot/internal/database/postgres"
 )
 
-func Migration(dir string) {
-	f, err := os.Open(dir)
+const (
+	migrationPath = "./internal/database/postgres/migrations/"
+)
+
+func Config() {
+	config.GetConfig()
+}
+
+func DB() {
+	postgres.GetDB()
+}
+
+func Bot() {
+	bot.GetBot()
+}
+
+func Migration() {
+	f, err := os.Open(migrationPath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -24,7 +42,7 @@ func Migration(dir string) {
 
 	db := postgres.GetDB()
 	for _, file := range files {
-		path := dir + file
+		path := migrationPath + file
 		query, err := os.ReadFile(path)
 		if err != nil {
 			log.Fatalln(err)
