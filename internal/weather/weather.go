@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/Shalqarov/weather-bot/config"
 	owm "github.com/briandowns/openweathermap"
+
+	"github.com/Shalqarov/weather-bot/config"
 )
 
 func CurrentTemperature(location string) (string, error) {

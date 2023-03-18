@@ -4,8 +4,9 @@ import (
 	"log"
 	"sync"
 
-	"github.com/Shalqarov/weather-bot/config"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+
+	"github.com/Shalqarov/weather-bot/config"
 )
 
 var (
@@ -25,22 +26,18 @@ func GetBot() *tgbotapi.BotAPI {
 	return bot
 }
 
-func HandleUpdates(updates tgbotapi.UpdatesChannel) error {
-	var err error
-
+func HandleUpdates(updates tgbotapi.UpdatesChannel) (err error) {
 	for update := range updates {
-
 		if update.Message == nil {
 			continue
 		}
 		if !update.Message.IsCommand() {
 			continue
 		}
-
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 		err = handleMessages(update, &msg)
 		if err != nil {
-			log.Println(err.Error())
+			log.Println(err)
 		}
 		_, err = GetBot().Send(msg)
 		if err != nil {
