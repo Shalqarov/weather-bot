@@ -4,9 +4,10 @@ import (
 	"log"
 	"sync"
 
-	"github.com/Shalqarov/weather-bot/config"
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/jmoiron/sqlx"
+
+	"github.com/Shalqarov/weather-bot/config"
 )
 
 const maxConns = 5

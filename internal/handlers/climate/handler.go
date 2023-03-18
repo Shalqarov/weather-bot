@@ -4,13 +4,14 @@ import (
 	"context"
 	"time"
 
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	uuid "github.com/satori/go.uuid"
+
 	"github.com/Shalqarov/weather-bot/internal/database/postgres"
 	"github.com/Shalqarov/weather-bot/internal/database/postgres/repository/stat"
 	"github.com/Shalqarov/weather-bot/internal/database/postgres/repository/user"
 	"github.com/Shalqarov/weather-bot/internal/weather"
 	"github.com/Shalqarov/weather-bot/tools"
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	uuid "github.com/satori/go.uuid"
 )
 
 func Handler(update tgbotapi.Update, msg *tgbotapi.MessageConfig) error {
@@ -31,7 +32,7 @@ func Handler(update tgbotapi.Update, msg *tgbotapi.MessageConfig) error {
 	}
 	msg.Text = forecast
 
-	s := stat.Stat{
+	stat := stat.Stat{
 		ID:        uuid.NewV4().String(),
 		UserID:    update.Message.From.ID,
 		Message:   forecast,
@@ -45,7 +46,7 @@ func Handler(update tgbotapi.Update, msg *tgbotapi.MessageConfig) error {
 	}
 	ctx, cancel = context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-	if err = s.Add(ctx, tx); err != nil {
+	if err = stat.Add(ctx, tx); err != nil {
 		msg.Text = tools.ErrorMsg
 		return err
 	}

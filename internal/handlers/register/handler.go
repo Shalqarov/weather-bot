@@ -4,10 +4,11 @@ import (
 	"context"
 	"time"
 
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+
 	"github.com/Shalqarov/weather-bot/internal/database/postgres"
 	"github.com/Shalqarov/weather-bot/internal/database/postgres/repository/user"
 	"github.com/Shalqarov/weather-bot/tools"
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 const (

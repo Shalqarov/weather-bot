@@ -3,8 +3,9 @@ package app
 import (
 	"log"
 
-	"github.com/Shalqarov/weather-bot/internal/bot"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+
+	"github.com/Shalqarov/weather-bot/internal/bot"
 )
 
 func Run() {

@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/Shalqarov/weather-bot/internal/database/postgres"
 	"github.com/jmoiron/sqlx"
+
+	"github.com/Shalqarov/weather-bot/internal/database/postgres"
 )
 
 type User struct {
