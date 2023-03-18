@@ -2,9 +2,21 @@ package pkg
 
 import "sync"
 
+var (
+	users *UMap
+	uOnce sync.Once
+)
+
 type UMap struct {
 	sync.RWMutex
 	mp map[int64]struct{}
+}
+
+func UsersMap() *UMap {
+	uOnce.Do(func() {
+		users = NewUMap(100)
+	})
+	return users
 }
 
 func (m *UMap) Set(k int64) {
