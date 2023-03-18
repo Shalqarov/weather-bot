@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/Shalqarov/weather-bot/internal/database/postgres"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -24,4 +25,15 @@ func (u *User) Add(ctx context.Context, tx *sqlx.Tx) error {
 		return err
 	}
 	return nil
+}
+
+func Has(ctx context.Context, id int64) (has bool, err error) {
+	query := `
+	SELECT EXISTS (
+		SELECT 1
+		FROM "user" WHERE "user_id" = $1
+	);
+`
+	err = postgres.GetDB().GetContext(ctx, &has, query, id)
+	return
 }
